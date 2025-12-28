@@ -1,11 +1,24 @@
-// Importamos el puerto desde las variables de entorno (.env)
-import { entorno } from './src/configuracion_sistema/variablesEntorno.js';
+import express from 'express';
+import cors from 'cors';
 
-// Importamos la aplicación Express ya preparada
-import app from './src/app.js';
+// Cargar variables de entorno
+import { entorno } from './configuracion_sistema/variablesEntorno.js';
 
-// Arrancamos el servidor y lo dejamos escuchando peticiones
-app.listen(entorno.puerto, () => {
-  // Mensaje para saber que el servidor está funcionando
-  console.log(`Servidor corriendo en puerto ${entorno.puerto}`);
+// Rutas
+import rutasUsuarios from './rutas_api/rutasUsuarios.js';
+
+const app = express();
+
+// Middlewares globales
+app.use(cors());
+app.use(express.json());
+
+// Ruta de prueba
+app.get('/ping', (req, res) => {
+  res.json({ mensaje: 'Backend funcionando correctamente' });
 });
+
+// Rutas API
+app.use('/api/usuarios', rutasUsuarios);
+
+export default app;
